@@ -1999,12 +1999,18 @@ function showTechnique(id){
 
 // ── Articles RSS Feed ──
 const RSS_SOURCES = [
-  {id:'who',name:'WHO',icon:'🌍',color:'rgba(45,212,191,.15)',url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.who.int/rss-feeds/news-english.xml&count=6'},
-  {id:'nami',name:'NAMI',icon:'🧠',color:'rgba(167,139,250,.15)',url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.nami.org/rss.xml&count=6'},
-  {id:'psychology',name:'Psychology Today',icon:'💙',color:'rgba(251,113,133,.15)',url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.psychologytoday.com/intl/front-page/feed&count=6'},
-  {id:'nhs',name:'NHS',icon:'🏥',color:'rgba(45,212,191,.1)',url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.nhs.uk/feed/news&count=6'},
-  {id:'mindful',name:'Mindful',icon:'🌱',color:'rgba(251,191,36,.12)',url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.mindful.org/feed&count=6'},
-  {id:'medicaltoday',name:'Medical News Today',icon:'💊',color:'rgba(129,140,248,.12)',url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.medicalnewstoday.com/rss/mental-health&count=6'}
+  {id:'who',name:'WHO',icon:'🌍',color:'rgba(45,212,191,.15)',
+   url:'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://www.who.int/rss-feeds/news-english.xml') + '&api_key=&count=6'},
+  {id:'psychology',name:'Psychology Today',icon:'💙',color:'rgba(251,113,133,.15)',
+   url:'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://www.psychologytoday.com/intl/front-page/feed') + '&count=6'},
+  {id:'mindful',name:'Mindful',icon:'🌱',color:'rgba(251,191,36,.12)',
+   url:'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://www.mindful.org/feed/') + '&count=6'},
+  {id:'medicaltoday',name:'Medical News Today',icon:'💊',color:'rgba(129,140,248,.12)',
+   url:'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://www.medicalnewstoday.com/rss/mental-health') + '&count=6'},
+  {id:'nhs',name:'NHS',icon:'🏥',color:'rgba(45,212,191,.1)',
+   url:'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://www.nhs.uk/news/feed/') + '&count=6'},
+  {id:'verywellmind',name:'Verywell Mind',icon:'🧠',color:'rgba(167,139,250,.15)',
+   url:'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://www.verywellmind.com/mental-health-4157274') + '&count=6'},
 ];
 
 let allArticles=[], currentFilter='all', articlesLoaded=false;
@@ -2012,28 +2018,45 @@ let allArticles=[], currentFilter='all', articlesLoaded=false;
 function loadArticles(){
   const grid=document.getElementById('articles-grid');
   if(!grid)return;
-  grid.innerHTML='<div class="articles-loading"><div class="loading-spinner"></div><p>Loading latest health articles...</p></div>';
+  grid.innerHTML='<div class="articles-loading"><div class="loading-spinner"></div><p style="color:var(--t2);">Loading latest health articles...</p></div>';
   allArticles=[];
-  const promises=RSS_SOURCES.map(source=>
+  let completed=0;
+  RSS_SOURCES.forEach(source=>{
     fetch(source.url)
     .then(r=>r.json())
     .then(data=>{
-      if(data.status==='ok'&&data.items){
+      if(data.status==='ok'&&data.items&&data.items.length>0){
         data.items.forEach(item=>{
           allArticles.push({
             id:source.id,name:source.name,icon:source.icon,color:source.color,
             title:item.title||'',
-            description:item.description?item.description.replace(/<[^>]*>/g,'').substring(0,150)+'...':'',
+            description:item.description?item.description.replace(/<[^>]*>/g,'').substring(0,160)+'...':'No description available.',
             link:item.link||'#',
             date:item.pubDate?new Date(item.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):''
           });
         });
       }
-    }).catch(()=>{})
-  );
-  Promise.all(promises).then(()=>{
-    articlesLoaded=true;
-    renderArticles(currentFilter);
+      completed++;
+      if(completed===RSS_SOURCES.length){
+        articlesLoaded=true;
+        if(allArticles.length===0){
+          grid.innerHTML='<div class="articles-loading"><p style="color:var(--t3);text-align:center;">Could not load articles right now.<br>Please try again in a moment.</p><br><button class="btn btnteal btnsm" onclick="loadArticles()">🔄 Try Again</button></div>';
+        } else {
+          renderArticles(currentFilter);
+        }
+      }
+    })
+    .catch(()=>{
+      completed++;
+      if(completed===RSS_SOURCES.length){
+        articlesLoaded=true;
+        if(allArticles.length===0){
+          grid.innerHTML='<div class="articles-loading"><p style="color:var(--t3);text-align:center;">Could not load articles.<br>Check your internet and try again.</p><br><button class="btn btnteal btnsm" onclick="loadArticles()">🔄 Try Again</button></div>';
+        } else {
+          renderArticles(currentFilter);
+        }
+      }
+    });
   });
 }
 
