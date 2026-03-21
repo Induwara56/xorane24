@@ -425,13 +425,13 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 .find-help-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:11px 22px;border-radius:50px;font-size:.875rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Instrument Sans',sans-serif;margin-top:12px}
 .find-help-btn:hover{background:rgba(45,212,191,.18);border-color:var(--teal)}
 
+[hidden]{display:none!important}
 button:disabled{opacity:.6;cursor:not-allowed;}
-
-/* Community board scrollbar */
 #board::-webkit-scrollbar{width:5px}
 #board::-webkit-scrollbar-track{background:var(--bg3);border-radius:4px}
 #board::-webkit-scrollbar-thumb{background:rgba(45,212,191,.3);border-radius:4px}
 #board::-webkit-scrollbar-thumb:hover{background:rgba(45,212,191,.6)}
+.giscus,.giscus-frame{width:100%!important}
 
 </style>
 </head>
@@ -896,13 +896,9 @@ button:disabled{opacity:.6;cursor:not-allowed;}
   </div>
 </div>
 
-
-
-<!-- Giscus Styled Container -->
-<div id="giscus-container" style="margin-top:56px;">
-
-  <!-- Header -->
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px;">
+<!-- Giscus Styled Container - Share Page Only -->
+<div id="giscus-container" style="margin-top:56px;padding:0 24px 48px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
     <div>
       <div class="lbl" style="margin-bottom:8px;">GitHub Community</div>
       <h2 style="font-size:1.4rem;">Permanent Discussion Board</h2>
@@ -912,16 +908,10 @@ button:disabled{opacity:.6;cursor:not-allowed;}
       <span style="font-size:.78rem;color:var(--teal);font-weight:600;">Powered by GitHub</span>
     </div>
   </div>
-
-  <!-- Info box -->
   <div style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.15);border-radius:var(--r);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:12px;">
     <span style="font-size:1.3rem;flex-shrink:0;">💙</span>
-    <div>
-      <p style="color:var(--t2);font-size:.855rem;line-height:1.6;">This board saves your messages <strong style="color:#fff;">permanently</strong> — sign in with your free GitHub account to join the conversation. Your words will help others who visit after you.</p>
-    </div>
+    <p style="color:var(--t2);font-size:.855rem;line-height:1.6;">Sign in with your free GitHub account to post messages that save <strong style="color:#fff;">permanently</strong> and are visible to everyone 🌍</p>
   </div>
-
-  <!-- Giscus iframe wrapper -->
   <div style="background:var(--bg2);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden;padding:24px;">
     <script src="https://giscus.app/client.js"
       data-repo="Induwara56/xorane24"
@@ -939,21 +929,10 @@ button:disabled{opacity:.6;cursor:not-allowed;}
       async>
     </script>
   </div>
-
-  <!-- Footer note -->
   <p style="text-align:center;color:var(--t3);font-size:.75rem;margin-top:14px;">
-    Don't have GitHub? <a href="https://github.com/signup" target="_blank" rel="noopener" style="color:var(--teal);">Create a free account</a> — it takes 1 minute 😊
+    No GitHub? <a href="https://github.com/signup" target="_blank" rel="noopener" style="color:var(--teal);">Create a free account</a> — takes 1 minute 😊
   </p>
-
 </div>
-
-<!-- Custom Giscus CSS overrides -->
-<style>
-.giscus, .giscus-frame {
-  width: 100% !important;
-  border-radius: var(--r) !important;
-}
-</style>
 
 
 <!-- ═══════════════ STORIES ═══════════════ -->
@@ -1063,7 +1042,7 @@ button:disabled{opacity:.6;cursor:not-allowed;}
       <h2 class="stitle tc">Contact Us</h2>
       <p class="ssub tc" style="margin:0 auto 36px;">We read every message. Response times may vary — we're a small volunteer team.</p>
       <div class="glass gp" style="max-width:600px;margin:0 auto;">
-        <form aria-label="Contact form" onsubmit="document.getElementById('contactsuccess').style.display='flex';this.reset();return false;">
+        <form aria-label="Contact form" onsubmit="var cs=document.getElementById('contactsuccess');cs.style.display='flex';this.reset();setTimeout(()=>{cs.style.display='none';},5000);return false;">
           <div class="fg"><label for="cname">Your Name (optional)</label><input type="text" id="cname" placeholder="You can remain anonymous"></div>
           <div class="fg"><label for="cemail">Email Address *</label><input type="email" id="cemail" placeholder="your@email.com" required></div>
           <div class="fg"><label for="csubject">Subject</label><select id="csubject"><option value="">Select a topic</option><option>General inquiry</option><option>Feedback or suggestion</option><option>Content concern</option><option>Partnership</option><option>Media inquiry</option></select></div>
@@ -1219,14 +1198,13 @@ document.getElementById('postform').addEventListener('submit',e=>{
     submitBtn.textContent='Share Anonymously 💙';
     submitBtn.disabled=false;
     const s=document.getElementById('postsuccess');
-    s.style.display='flex'; setTimeout(()=>{ s.style.display='none'; }, 5000);
+    s.style.display='flex'; setTimeout(()=>{ s.style.display='none'; },5000);
   }).catch(()=>{
     submitBtn.textContent='Share Anonymously 💙';
     submitBtn.disabled=false;
   });
 });
 
-// Load posts from Google Sheets
 function loadPosts(){
   fetch('https://script.google.com/macros/s/AKfycbyvAZWq7glZZBs4J2OVWr52-o6t-IcqZ8pOPdcOLppHVhE6tgsFDCNqvMOZP6KBl7gB/exec')
   .then(r=>r.json())
@@ -1234,7 +1212,6 @@ function loadPosts(){
     if(data.status==='success'&&data.posts&&data.posts.length>0){
       const board=document.getElementById('board');
       const icons={sad:'😔',anxious:'😰',lonely:'💙',overwhelmed:'😞',hopeful:'🌱',grateful:'🙏',other:'💬'};
-      // Don't clear default posts - just add new ones at top
       [...data.posts].reverse().forEach(post=>{
         const time=new Date(post.time).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
         const div=document.createElement('div');
@@ -1246,7 +1223,6 @@ function loadPosts(){
   }).catch(err=>console.log('Posts load error:',err));
 }
 
-// Override showPage to load posts when Share tab opens
 const _origShowPage=showPage;
 window.showPage=function(id){
   _origShowPage(id);
