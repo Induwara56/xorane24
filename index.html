@@ -425,9 +425,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 .find-help-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:11px 22px;border-radius:50px;font-size:.875rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Instrument Sans',sans-serif;margin-top:12px}
 .find-help-btn:hover{background:rgba(45,212,191,.18);border-color:var(--teal)}
 
-/* Fix hidden elements - never show unless JS removes hidden */
-[hidden] { display: none !important; }
-
+button:disabled{opacity:.6;cursor:not-allowed;}
 </style>
 </head>
 <body>
@@ -892,26 +890,64 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 </div>
 
 
-<!-- Giscus Community Comments -->
-<div id="giscus-container" style="margin-top:40px;">
-  <div class="lbl" style="justify-content:center;margin-bottom:16px;">💬 Join the Discussion</div>
-  <p style="text-align:center;color:var(--t2);font-size:.875rem;margin-bottom:24px;">Sign in with GitHub to share your thoughts permanently 💙</p>
-  <script src="https://giscus.app/client.js"
-    data-repo="Induwara56/xorane24"
-    data-repo-id="R_kgDORrZMzg"
-    data-category="General"
-    data-category-id="DIC_kwDORrZMzs4C4-AP"
-    data-mapping="pathname"
-    data-strict="0"
-    data-reactions-enabled="1"
-    data-emit-metadata="0"
-    data-input-position="bottom"
-    data-theme="dark_dimmed"
-    data-lang="en"
-    crossorigin="anonymous"
-    async>
-  </script>
+
+<!-- Giscus Styled Container -->
+<div id="giscus-container" style="margin-top:56px;">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px;">
+    <div>
+      <div class="lbl" style="margin-bottom:8px;">GitHub Community</div>
+      <h2 style="font-size:1.4rem;">Permanent Discussion Board</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);border-radius:50px;padding:8px 16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:var(--teal);flex-shrink:0;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      <span style="font-size:.78rem;color:var(--teal);font-weight:600;">Powered by GitHub</span>
+    </div>
+  </div>
+
+  <!-- Info box -->
+  <div style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.15);border-radius:var(--r);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:12px;">
+    <span style="font-size:1.3rem;flex-shrink:0;">💙</span>
+    <div>
+      <p style="color:var(--t2);font-size:.855rem;line-height:1.6;">This board saves your messages <strong style="color:#fff;">permanently</strong> — sign in with your free GitHub account to join the conversation. Your words will help others who visit after you.</p>
+    </div>
+  </div>
+
+  <!-- Giscus iframe wrapper -->
+  <div style="background:var(--bg2);border:1px solid var(--b2);border-radius:var(--rxl);overflow:hidden;padding:24px;">
+    <script src="https://giscus.app/client.js"
+      data-repo="Induwara56/xorane24"
+      data-repo-id="R_kgDORrZMzg"
+      data-category="General"
+      data-category-id="DIC_kwDORrZMzs4C4-AP"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="dark_dimmed"
+      data-lang="en"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </div>
+
+  <!-- Footer note -->
+  <p style="text-align:center;color:var(--t3);font-size:.75rem;margin-top:14px;">
+    Don't have GitHub? <a href="https://github.com/signup" target="_blank" rel="noopener" style="color:var(--teal);">Create a free account</a> — it takes 1 minute 😊
+  </p>
+
 </div>
+
+<!-- Custom Giscus CSS overrides -->
+<style>
+.giscus, .giscus-frame {
+  width: 100% !important;
+  border-radius: var(--r) !important;
+}
+</style>
+
 
 <!-- ═══════════════ STORIES ═══════════════ -->
 <div id="page-stories" class="page">
@@ -1020,7 +1056,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opa
       <h2 class="stitle tc">Contact Us</h2>
       <p class="ssub tc" style="margin:0 auto 36px;">We read every message. Response times may vary — we're a small volunteer team.</p>
       <div class="glass gp" style="max-width:600px;margin:0 auto;">
-        <form aria-label="Contact form" onsubmit="var cs=document.getElementById('contactsuccess'); cs.hidden=false; this.reset(); setTimeout(()=>{ cs.hidden=true; }, 5000); return false;">
+        <form aria-label="Contact form" onsubmit="document.getElementById('contactsuccess').hidden=false;this.reset();return false;">
           <div class="fg"><label for="cname">Your Name (optional)</label><input type="text" id="cname" placeholder="You can remain anonymous"></div>
           <div class="fg"><label for="cemail">Email Address *</label><input type="email" id="cemail" placeholder="your@email.com" required></div>
           <div class="fg"><label for="csubject">Subject</label><select id="csubject"><option value="">Select a topic</option><option>General inquiry</option><option>Feedback or suggestion</option><option>Content concern</option><option>Partnership</option><option>Media inquiry</option></select></div>
@@ -1159,14 +1195,56 @@ document.getElementById('postform').addEventListener('submit',e=>{
   const board=document.getElementById('board');
   if(!msg)return;
   const icons={sad:'😔',anxious:'😰',lonely:'💙',overwhelmed:'😞',hopeful:'🌱',grateful:'🙏',other:'💬'};
-  const div=document.createElement('div');
-  div.className='cpost';
-  div.innerHTML=`<div class="cpemoji">${icons[feel]||'💬'}</div><div class="cptext"><p>${esc(msg)}</p><div class="cpmeta">Anonymous · Just now</div></div><button class="heartbtn" onclick="heartPost(this)" aria-label="Send love">🤍</button>`;
-  board.prepend(div);
-  e.target.reset();
-  const s=document.getElementById('postsuccess');
-  s.hidden=false; setTimeout(()=>{ s.hidden=true; }, 5000);
+  const submitBtn=e.target.querySelector('button[type="submit"]');
+  submitBtn.textContent='Sharing...';
+  submitBtn.disabled=true;
+  fetch('https://script.google.com/macros/s/AKfycbyvAZWq7glZZBs4J2OVWr52-o6t-IcqZ8pOPdcOLppHVhE6tgsFDCNqvMOZP6KBl7gB/exec',{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({feeling:feel,message:msg,time:new Date().toISOString()})
+  }).then(()=>{
+    const div=document.createElement('div');
+    div.className='cpost';
+    div.innerHTML=`<div class="cpemoji">${icons[feel]||'💬'}</div><div class="cptext"><p>${esc(msg)}</p><div class="cpmeta">Anonymous · Just now</div></div><button class="heartbtn" onclick="heartPost(this)" aria-label="Send love">🤍</button>`;
+    board.prepend(div);
+    e.target.reset();
+    submitBtn.textContent='Share Anonymously 💙';
+    submitBtn.disabled=false;
+    const s=document.getElementById('postsuccess');
+    s.hidden=false; setTimeout(()=>s.hidden=true,5000);
+  }).catch(()=>{
+    submitBtn.textContent='Share Anonymously 💙';
+    submitBtn.disabled=false;
+  });
 });
+
+// Load posts from Google Sheets
+function loadPosts(){
+  fetch('https://script.google.com/macros/s/AKfycbyvAZWq7glZZBs4J2OVWr52-o6t-IcqZ8pOPdcOLppHVhE6tgsFDCNqvMOZP6KBl7gB/exec')
+  .then(r=>r.json())
+  .then(data=>{
+    if(data.status==='success'&&data.posts&&data.posts.length>0){
+      const board=document.getElementById('board');
+      const icons={sad:'😔',anxious:'😰',lonely:'💙',overwhelmed:'😞',hopeful:'🌱',grateful:'🙏',other:'💬'};
+      board.innerHTML='';
+      [...data.posts].reverse().forEach(post=>{
+        const time=new Date(post.time).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+        const div=document.createElement('div');
+        div.className='cpost';
+        div.innerHTML=`<div class="cpemoji">${icons[post.feeling]||'💬'}</div><div class="cptext"><p>${esc(post.message)}</p><div class="cpmeta">Anonymous · ${time}</div></div><button class="heartbtn" onclick="heartPost(this)" aria-label="Send love">🤍</button>`;
+        board.appendChild(div);
+      });
+    }
+  }).catch(err=>console.log('Posts load error:',err));
+}
+
+// Override showPage to load posts when Share tab opens
+const _origShowPage=showPage;
+window.showPage=function(id){
+  _origShowPage(id);
+  if(id==='share') setTimeout(loadPosts,400);
+};
 
 /* ── Blog Posts ── */
 const blogposts={
