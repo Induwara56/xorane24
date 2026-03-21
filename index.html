@@ -856,7 +856,7 @@ button:disabled{opacity:.6;cursor:not-allowed;}
             <div class="alert alertamber mb16" style="font-size:.835rem;"><span>💛</span><div>Be kind and supportive. Posts promoting harm will be removed. Not a crisis service — <button onclick="showPage('help')" style="color:var(--amber);font-weight:700;text-decoration:underline;background:none;border:none;cursor:pointer;font-size:.835rem;">call a hotline</button> if in need.</div></div>
             <button type="submit" class="btn btnteal" style="width:100%;justify-content:center;">Share Anonymously 💙</button>
           </form>
-          <div id="postsuccess" hidden class="alert alertteal mt16" role="status" aria-live="polite"><span>✅</span><div><strong>Shared.</strong> Thank you for trusting this community. You are not alone. 💙</div></div>
+          <div id="postsuccess" style="display:none;" class="alert alertteal mt16" role="status" aria-live="polite"><span>✅</span><div><strong>Shared.</strong> Thank you for trusting this community. You are not alone. 💙</div></div>
         </div>
       </section>
       <aside>
@@ -1056,7 +1056,7 @@ button:disabled{opacity:.6;cursor:not-allowed;}
       <h2 class="stitle tc">Contact Us</h2>
       <p class="ssub tc" style="margin:0 auto 36px;">We read every message. Response times may vary — we're a small volunteer team.</p>
       <div class="glass gp" style="max-width:600px;margin:0 auto;">
-        <form aria-label="Contact form" onsubmit="document.getElementById('contactsuccess').hidden=false;this.reset();return false;">
+        <form aria-label="Contact form" onsubmit="document.getElementById('contactsuccess').style.display='flex';this.reset();return false;">
           <div class="fg"><label for="cname">Your Name (optional)</label><input type="text" id="cname" placeholder="You can remain anonymous"></div>
           <div class="fg"><label for="cemail">Email Address *</label><input type="email" id="cemail" placeholder="your@email.com" required></div>
           <div class="fg"><label for="csubject">Subject</label><select id="csubject"><option value="">Select a topic</option><option>General inquiry</option><option>Feedback or suggestion</option><option>Content concern</option><option>Partnership</option><option>Media inquiry</option></select></div>
@@ -1064,7 +1064,7 @@ button:disabled{opacity:.6;cursor:not-allowed;}
           <div class="alert alertred mb16" style="font-size:.835rem;"><span>⚠️</span><div><strong>This is not a crisis line.</strong> Need immediate help? <button onclick="showPage('help')" style="color:var(--red);font-weight:700;text-decoration:underline;background:none;border:none;cursor:pointer;font-size:.835rem;">View crisis hotlines →</button></div></div>
           <button type="submit" class="btn btnteal" style="width:100%;justify-content:center;">Send Message 📨</button>
         </form>
-        <div id="contactsuccess" hidden class="alert alertteal mt16" role="status"><span>✅</span><div><strong>Message received.</strong> We'll respond within 48 hours.</div></div>
+        <div id="contactsuccess" style="display:none;" class="alert alertteal mt16" role="status"><span>✅</span><div><strong>Message received.</strong> We'll respond within 48 hours.</div></div>
       </div>
       <p class="tc mt16" style="color:var(--t3);font-size:.855rem;">Or email: <a href="/cdn-cgi/l/email-protection#c6aea3aaaaa986b5a3b4a3a8a3b5b6a7a5a3e8a9b4a1"><span class="__cf_email__" data-cfemail="c2aaa7aeaead82b1a7b0a7aca7b1b2a3a1a7ecadb0a5">[email&#160;protected]</span></a></p>
     </section>
@@ -1212,7 +1212,7 @@ document.getElementById('postform').addEventListener('submit',e=>{
     submitBtn.textContent='Share Anonymously 💙';
     submitBtn.disabled=false;
     const s=document.getElementById('postsuccess');
-    s.hidden=false; setTimeout(()=>s.hidden=true,5000);
+    s.style.display='flex'; setTimeout(()=>{ s.style.display='none'; }, 5000);
   }).catch(()=>{
     submitBtn.textContent='Share Anonymously 💙';
     submitBtn.disabled=false;
