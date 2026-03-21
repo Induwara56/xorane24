@@ -1038,37 +1038,29 @@ button:disabled{opacity:.6;cursor:not-allowed;}
     <h1>📰 Articles & <span class="grad">Health News</span></h1>
     <p>Latest articles from the world's most trusted mental health and medical organizations — updated automatically.</p>
   </div>
-
   <div class="wrap sec">
-
-    <!-- Source filters -->
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
-      <div class="source-filter" id="sourceFilters">
-        <button class="source-btn active" onclick="filterArticles('all',this)">🌐 All Sources</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px;">
+      <div class="source-filter">
+        <button class="source-btn active" onclick="filterArticles('all',this)">🌐 All</button>
         <button class="source-btn" onclick="filterArticles('who',this)">🌍 WHO</button>
-        <button class="source-btn" onclick="filterArticles('nami',this)">🧠 NAMI</button>
         <button class="source-btn" onclick="filterArticles('psychology',this)">💙 Psychology Today</button>
-        <button class="source-btn" onclick="filterArticles('nhs',this)">🏥 NHS</button>
         <button class="source-btn" onclick="filterArticles('mindful',this)">🌱 Mindful</button>
         <button class="source-btn" onclick="filterArticles('medicaltoday',this)">💊 Medical News</button>
+        <button class="source-btn" onclick="filterArticles('nhs',this)">🏥 NHS</button>
+        <button class="source-btn" onclick="filterArticles('verywellmind',this)">🧠 Verywell Mind</button>
       </div>
-      <button class="refresh-btn" onclick="loadArticles()">🔄 Refresh</button>
+      <button class="refresh-btn" onclick="articlesLoaded=false;loadArticles();">🔄 Refresh</button>
     </div>
-
-    <!-- Alert -->
     <div class="alert alertteal mb32">
       <span>📢</span>
-      <div>These articles are sourced from trusted health organizations worldwide. Content is for informational purposes only — always consult a professional for medical advice.</div>
+      <div>Articles sourced from trusted health organizations worldwide. For informational purposes only — always consult a professional.</div>
     </div>
-
-    <!-- Articles Grid -->
     <div id="articles-grid">
       <div class="articles-loading">
         <div class="loading-spinner"></div>
         <p>Loading latest health articles...</p>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -1179,7 +1171,7 @@ button:disabled{opacity:.6;cursor:not-allowed;}
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ── SPA Router ── */
-const pages = ['home','help','calm','share','stories','blog','about'];
+const pages = ['home','help','calm','share','stories','blog','about','articles'];
 function showPage(id) {
   pages.forEach(p => {
     document.getElementById('page-'+p).classList.toggle('active', p===id);
