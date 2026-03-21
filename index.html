@@ -2027,19 +2027,22 @@ let allArticles=[], currentFilter='all', articlesLoaded=false;
 function loadArticles(){
   const grid=document.getElementById('articles-grid');
   if(!grid)return;
-  grid.innerHTML='<div class="articles-loading"><div class="loading-spinner"></div><p style="color:var(--t2);">Loading latest health articles...</p></div>';
-  allArticles=[];
-  let completed=0;
-  let anySuccess=false;
 
+  // Show fallback articles immediately
+  allArticles=[...FALLBACK_ARTICLES];
+  articlesLoaded=true;
+  renderArticles(currentFilter);
+
+  // Try to load live RSS in background
+  let completed=0;
+  let liveArticles=[];
   RSS_SOURCES.forEach(source=>{
-    fetch(source.url)
+    fetch(source.url, {signal: AbortSignal.timeout(5000)})
     .then(r=>r.json())
     .then(data=>{
       if(data.status==='ok'&&data.items&&data.items.length>0){
-        anySuccess=true;
         data.items.forEach(item=>{
-          allArticles.push({
+          liveArticles.push({
             id:source.id,name:source.name,icon:source.icon,color:source.color,
             title:item.title||'',
             description:item.description?item.description.replace(/<[^>]*>/g,'').substring(0,160)+'...':'',
@@ -2049,24 +2052,12 @@ function loadArticles(){
         });
       }
       completed++;
-      if(completed===RSS_SOURCES.length){
-        articlesLoaded=true;
-        if(!anySuccess||allArticles.length===0){
-          allArticles=[...FALLBACK_ARTICLES];
-        }
+      if(completed===RSS_SOURCES.length&&liveArticles.length>0){
+        allArticles=liveArticles;
         renderArticles(currentFilter);
       }
     })
-    .catch(()=>{
-      completed++;
-      if(completed===RSS_SOURCES.length){
-        articlesLoaded=true;
-        if(allArticles.length===0){
-          allArticles=[...FALLBACK_ARTICLES];
-        }
-        renderArticles(currentFilter);
-      }
-    });
+    .catch(()=>{ completed++; });
   });
 }
 
