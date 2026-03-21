@@ -424,6 +424,10 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 .country-close:hover{color:#fff;background:var(--s2)}
 .find-help-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:11px 22px;border-radius:50px;font-size:.875rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Instrument Sans',sans-serif;margin-top:12px}
 .find-help-btn:hover{background:rgba(45,212,191,.18);border-color:var(--teal)}
+
+/* Fix hidden elements - never show unless JS removes hidden */
+[hidden] { display: none !important; }
+
 </style>
 </head>
 <body>
@@ -1016,7 +1020,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opa
       <h2 class="stitle tc">Contact Us</h2>
       <p class="ssub tc" style="margin:0 auto 36px;">We read every message. Response times may vary — we're a small volunteer team.</p>
       <div class="glass gp" style="max-width:600px;margin:0 auto;">
-        <form aria-label="Contact form" onsubmit="document.getElementById('contactsuccess').hidden=false;this.reset();return false;">
+        <form aria-label="Contact form" onsubmit="var cs=document.getElementById('contactsuccess'); cs.hidden=false; this.reset(); setTimeout(()=>{ cs.hidden=true; }, 5000); return false;">
           <div class="fg"><label for="cname">Your Name (optional)</label><input type="text" id="cname" placeholder="You can remain anonymous"></div>
           <div class="fg"><label for="cemail">Email Address *</label><input type="email" id="cemail" placeholder="your@email.com" required></div>
           <div class="fg"><label for="csubject">Subject</label><select id="csubject"><option value="">Select a topic</option><option>General inquiry</option><option>Feedback or suggestion</option><option>Content concern</option><option>Partnership</option><option>Media inquiry</option></select></div>
@@ -1161,7 +1165,7 @@ document.getElementById('postform').addEventListener('submit',e=>{
   board.prepend(div);
   e.target.reset();
   const s=document.getElementById('postsuccess');
-  s.hidden=false; setTimeout(()=>s.hidden=true,5000);
+  s.hidden=false; setTimeout(()=>{ s.hidden=true; }, 5000);
 });
 
 /* ── Blog Posts ── */
