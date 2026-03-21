@@ -1227,7 +1227,7 @@ function loadPosts(){
     if(data.status==='success'&&data.posts&&data.posts.length>0){
       const board=document.getElementById('board');
       const icons={sad:'😔',anxious:'😰',lonely:'💙',overwhelmed:'😞',hopeful:'🌱',grateful:'🙏',other:'💬'};
-      board.innerHTML='';
+      // Don't clear default posts - just add new ones at top
       [...data.posts].reverse().forEach(post=>{
         const time=new Date(post.time).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
         const div=document.createElement('div');
