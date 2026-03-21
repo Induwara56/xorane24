@@ -426,6 +426,13 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 .find-help-btn:hover{background:rgba(45,212,191,.18);border-color:var(--teal)}
 
 button:disabled{opacity:.6;cursor:not-allowed;}
+
+/* Community board scrollbar */
+#board::-webkit-scrollbar{width:5px}
+#board::-webkit-scrollbar-track{background:var(--bg3);border-radius:4px}
+#board::-webkit-scrollbar-thumb{background:rgba(45,212,191,.3);border-radius:4px}
+#board::-webkit-scrollbar-thumb:hover{background:rgba(45,212,191,.6)}
+
 </style>
 </head>
 <body>
@@ -879,7 +886,7 @@ button:disabled{opacity:.6;cursor:not-allowed;}
       <div class="lbl" style="justify-content:center;margin-bottom:14px;">Community</div>
       <h2 class="stitle tc" id="boardh">Community Board 💙</h2>
       <p class="ssub tc" style="margin:0 auto 36px;">Messages from people just like you. You are never as alone as you feel.</p>
-      <div id="board">
+      <div id="board" style="max-height:520px;overflow-y:auto;padding-right:8px;scroll-behavior:smooth;">
         <div class="cpost"><div class="cpemoji">🌱</div><div class="cptext"><p>I've been struggling with anxiety for months. Today I finally called a helpline. The person was so kind. Please don't be afraid to call — they really do care.</p><div class="cpmeta">Anonymous · 2 hours ago</div></div><button class="heartbtn" onclick="heartPost(this)" aria-label="Send love">🤍</button></div>
         <div class="cpost"><div class="cpemoji">💙</div><div class="cptext"><p>To anyone feeling like they don't belong anywhere — I see you. I felt that way for years. It does get better. Not all at once, but slowly, steadily. Hold on.</p><div class="cpmeta">Anonymous · 5 hours ago</div></div><button class="heartbtn" onclick="heartPost(this)" aria-label="Send love">🤍</button></div>
         <div class="cpost"><div class="cpemoji">😔</div><div class="cptext"><p>Today was really dark. I didn't get out of bed until 4pm. But I'm here, writing this, and that's something. Small victories count.</p><div class="cpmeta">Anonymous · Yesterday</div></div><button class="heartbtn" onclick="heartPost(this)" aria-label="Send love">🤍</button></div>
@@ -1233,7 +1240,7 @@ function loadPosts(){
         const div=document.createElement('div');
         div.className='cpost';
         div.innerHTML=`<div class="cpemoji">${icons[post.feeling]||'💬'}</div><div class="cptext"><p>${esc(post.message)}</p><div class="cpmeta">Anonymous · ${time}</div></div><button class="heartbtn" onclick="heartPost(this)" aria-label="Send love">🤍</button>`;
-        board.appendChild(div);
+        board.prepend(div);
       });
     }
   }).catch(err=>console.log('Posts load error:',err));
