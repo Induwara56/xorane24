@@ -310,7 +310,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 :focus-visible{outline:2px solid var(--teal);outline-offset:3px}
 
 /* Music Popup */
-.music-popup-overlay{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .4s ease}
+.music-popup-overlay{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
 .music-popup{background:linear-gradient(135deg,#0e1420,#090d17);border:1px solid rgba(232,121,249,.25);border-radius:26px;padding:40px 36px;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(232,121,249,.1)}
 .music-popup .icon{font-size:3.5rem;margin-bottom:16px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
@@ -536,8 +536,9 @@ button:disabled{opacity:.6;cursor:not-allowed;}
       <li><button onclick="showPage(&#39;share&#39;)" id="nav-share" fdprocessedid="4njge">Share</button></li>
       <li><button onclick="showPage(&#39;stories&#39;)" id="nav-stories" fdprocessedid="6pmwqi">Stories</button></li>
       <li><button onclick="showPage(&#39;blog&#39;)" id="nav-blog" fdprocessedid="02o8ac">Blog</button></li>
-      <li><button onclick="showPage(&#39;about&#39;)" id="nav-about" fdprocessedid="0qqy7i">About</button></li>
       <li><button onclick="showPage(&#39;articles&#39;)" id="nav-articles" fdprocessedid="zb2tai">Articles</button></li>
+      <li><button onclick="showPage(&#39;about&#39;)" id="nav-about" fdprocessedid="0qqy7i">About</button></li>
+      
       <li><button onclick="showPage(&#39;help&#39;)" class="navcta" fdprocessedid="qokeo">🆘 Get Help Now</button></li>
     </ul>
   </div>
@@ -1209,7 +1210,7 @@ button:disabled{opacity:.6;cursor:not-allowed;}
 
 <script data-cfasync="false" src="./Xorane 24 – You Are Not Alone _ Mental Health Support_files/email-decode.min.js.download"></script><script>
 /* ── SPA Router ── */
-const pages = ['home','help','calm','share','stories','blog','about'];
+const pages = ['home','help','calm','share','stories','blog','articles','about'];
 function showPage(id) {
   pages.forEach(p => {
     document.getElementById('page-'+p).classList.toggle('active', p===id);
@@ -2035,31 +2036,53 @@ const RSS_SOURCES = [
 
 let allArticles=[], currentFilter='all', articlesLoaded=false;
 
+
+const FALLBACK_ARTICLES = [
+  {id:'who',name:'WHO',icon:'🌍',color:'rgba(45,212,191,.15)',title:'Mental Health: Strengthening Our Response',description:'Mental health is an integral part of health and well-being. WHO supports countries to implement the Mental Health Action Plan.',link:'https://www.who.int/news-room/fact-sheets/detail/mental-health-strengthening-our-response',date:'2025'},
+  {id:'who',name:'WHO',icon:'🌍',color:'rgba(45,212,191,.15)',title:'Depression: A Leading Cause of Disability Worldwide',description:'Over 280 million people affected by depression worldwide. It is different from usual mood fluctuations and short-lived emotional responses.',link:'https://www.who.int/news-room/fact-sheets/detail/depression',date:'2025'},
+  {id:'who',name:'WHO',icon:'🌍',color:'rgba(45,212,191,.15)',title:'Anxiety Disorders: WHO Fact Sheet',description:'Anxiety disorders are the most common mental disorders affecting more than 1 in 10 people globally.',link:'https://www.who.int/news-room/fact-sheets/detail/anxiety-disorders',date:'2025'},
+  {id:'psychology',name:'Psychology Today',icon:'💙',color:'rgba(251,113,133,.15)',title:'The Science of Happiness',description:'Research shows that happiness is not about getting what you want — it is about wanting what you have. Gratitude and connection are key.',link:'https://www.psychologytoday.com/us/basics/happiness',date:'2025'},
+  {id:'psychology',name:'Psychology Today',icon:'💙',color:'rgba(251,113,133,.15)',title:'How to Build Resilience in Difficult Times',description:'Resilience is the ability to adapt to adversity. These evidence-based strategies help you bounce back from life challenges.',link:'https://www.psychologytoday.com/us/basics/resilience',date:'2025'},
+  {id:'mindful',name:'Mindful',icon:'🌱',color:'rgba(251,191,36,.12)',title:'Getting Started with Mindfulness',description:'Mindfulness means maintaining a moment-by-moment awareness of our thoughts, feelings, and surrounding environment.',link:'https://www.mindful.org/meditation/mindfulness-getting-started/',date:'2025'},
+  {id:'mindful',name:'Mindful',icon:'🌱',color:'rgba(251,191,36,.12)',title:'How to Meditate: A Beginner's Guide',description:'Meditation is simpler than most people think. Start meditating today with just 5 minutes a day.',link:'https://www.mindful.org/how-to-meditate/',date:'2025'},
+  {id:'verywellmind',name:'Verywell Mind',icon:'🧠',color:'rgba(167,139,250,.15)',title:'What Is Cognitive Behavioral Therapy?',description:'CBT is a type of psychotherapy that focuses on negative patterns of thought and how they lead to negative behaviors.',link:'https://www.verywellmind.com/what-is-cognitive-behavior-therapy-2795747',date:'2025'},
+  {id:'verywellmind',name:'Verywell Mind',icon:'🧠',color:'rgba(167,139,250,.15)',title:'Coping Strategies for Stress and Anxiety',description:'Effective coping strategies help you manage stress and anxiety. Learn which techniques work best.',link:'https://www.verywellmind.com/stress-and-health-3145086',date:'2025'},
+  {id:'medicaltoday',name:'Medical News Today',icon:'💊',color:'rgba(129,140,248,.12)',title:'What to Know About Mental Health',description:'Mental health refers to cognitive, behavioral, and emotional well-being. It affects how people think, feel, and behave.',link:'https://www.medicalnewstoday.com/articles/154543',date:'2025'},
+  {id:'medicaltoday',name:'Medical News Today',icon:'💊',color:'rgba(129,140,248,.12)',title:'How Exercise Affects Mental Health',description:'Regular physical activity can improve mood, reduce anxiety and depression, and boost self-esteem.',link:'https://www.medicalnewstoday.com/articles/324745',date:'2025'},
+  {id:'nhs',name:'NHS',icon:'🏥',color:'rgba(45,212,191,.1)',title:'Mental Health Support: NHS Guide',description:'The NHS provides a range of mental health services including talking therapies and crisis support.',link:'https://www.nhs.uk/mental-health/',date:'2025'},
+  {id:'nhs',name:'NHS',icon:'🏥',color:'rgba(45,212,191,.1)',title:'Self-Care Tips for Mental Health',description:'Good self-care is key to improved mood and reduced anxiety. Small acts every day make a big difference.',link:'https://www.nhs.uk/every-mind-matters/',date:'2025'},
+];
+
 function loadArticles(){
   const grid=document.getElementById('articles-grid');
   if(!grid)return;
-  grid.innerHTML='<div class="articles-loading"><div class="loading-spinner"></div><p>Loading latest health articles...</p></div>';
-  allArticles=[];
-  const promises=RSS_SOURCES.map(source=>
+  // Show fallback immediately
+  allArticles=[...FALLBACK_ARTICLES];
+  articlesLoaded=true;
+  renderArticles(currentFilter);
+  // Try live RSS in background
+  let completed=0, liveArticles=[];
+  RSS_SOURCES.forEach(source=>{
     fetch(source.url)
     .then(r=>r.json())
     .then(data=>{
-      if(data.status==='ok'&&data.items){
+      if(data.status==='ok'&&data.items&&data.items.length>0){
         data.items.forEach(item=>{
-          allArticles.push({
+          liveArticles.push({
             id:source.id,name:source.name,icon:source.icon,color:source.color,
             title:item.title||'',
-            description:item.description?item.description.replace(/<[^>]*>/g,'').substring(0,150)+'...':'',
+            description:item.description?item.description.replace(/<[^>]*>/g,'').substring(0,160)+'...':'',
             link:item.link||'#',
             date:item.pubDate?new Date(item.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):''
           });
         });
       }
-    }).catch(()=>{})
-  );
-  Promise.all(promises).then(()=>{
-    articlesLoaded=true;
-    renderArticles(currentFilter);
+      completed++;
+      if(completed===RSS_SOURCES.length&&liveArticles.length>0){
+        allArticles=liveArticles;
+        renderArticles(currentFilter);
+      }
+    }).catch(()=>{ completed++; });
   });
 }
 
