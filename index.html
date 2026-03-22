@@ -2,15 +2,15 @@
 <!-- saved from url=(0021)https://xorane24.org/ -->
 <html lang="en"><head>
 <title>Xorane 24: Mental Health Support, Resources & Community | You Are Not Alone</title>
-<meta name="description" content="Xorane 24 offers compassionate mental health support, resources, and a welcoming community. You are not alone on your wellness journey. Find help & connect today.">
-<meta name="keywords" content="Xorane 24, mental health support, mental wellness, emotional support, mental health resources, online mental health, community support, anxiety help, depression help, stress relief, self-care, coping mechanisms, virtual mental health, well-being, support groups, mental health community">
+<meta name="description" content="Find compassionate mental health support & resources at Xorane 24. We believe you are not alone on your wellness journey. Connect with our supportive community today.">
+<meta name="keywords" content="Xorane 24, mental health support, mental wellness, online mental health, emotional support, anxiety help, depression help, stress relief, self-care, coping mechanisms, mental health resources, community support, you are not alone, mental health community">
 <meta property="og:title" content="Xorane 24 | Mental Health Support & Community | You Are Not Alone">
-<meta property="og:description" content="Xorane 24 offers compassionate mental health support, resources, and a welcoming community. You are not alone on your wellness journey. Find help & connect today.">
+<meta property="og:description" content="Find compassionate mental health support & resources at Xorane 24. Join our supportive community for wellness. You are not alone.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://xorane24.org">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Xorane 24 | Mental Health Support & Community | You Are Not Alone">
-<meta name="twitter:description" content="Xorane 24 offers compassionate mental health support, resources, and a welcoming community. You are not alone on your wellness journey. Find help & connect today.">
+<meta name="twitter:description" content="Find compassionate mental health support & resources at Xorane 24. Join our supportive community for wellness. You are not alone.">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -18,39 +18,21 @@
     {
       "@type": "Organization",
       "name": "Xorane 24",
-      "url": "https://xorane24.org",
-      "description": "Xorane 24 provides compassionate mental health support, resources, and a supportive community for individuals on their wellness journey.",
-      "logo": "https://xorane24.org/logo.png"
+      "url": "https://xorane24.org"
     },
     {
       "@type": "WebSite",
-      "url": "https://xorane24.org",
       "name": "Xorane 24",
-      "description": "Find compassionate mental health support, resources, and a welcoming community at Xorane 24. You are not alone on your wellness journey.",
+      "url": "https://xorane24.org",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://xorane24.org/search?q={search_term_string}"
-        },
-        "queryInput": "required name=search_term_string"
+        "target": "https://xorane24.org/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
       }
     }
   ]
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1338,16 +1320,7 @@ function loadPosts(){
 }
 
 const _origShowPage=showPage;
-window.showPage=function(id){
-  _origShowPage(id);
-  if(id==='share'){
-    setTimeout(loadPosts,400);
-    document.getElementById('giscus-container').style.display='block';
-  } else {
-    var gc = document.getElementById('giscus-container');
-    if(gc) gc.style.display='none';
-  }
-};
+
 
 /* ── Blog Posts ── */
 const blogposts={
@@ -2137,7 +2110,11 @@ function filterArticles(filter,btn){
 const _spOrig=window.showPage;
 window.showPage=function(id){
   _spOrig(id);
+  // Load articles when articles page opens
   if(id==='articles'&&!articlesLoaded) setTimeout(loadArticles,300);
+  // Load community posts when share page opens
+  if(id==='share') setTimeout(loadPosts,400);
+  // Show/hide Giscus
   var gc=document.getElementById('giscus-container');
   if(gc) gc.style.display=id==='share'?'block':'none';
 };
