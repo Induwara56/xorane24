@@ -10,9 +10,34 @@ if not api_key:
 
 genai.configure(api_key=api_key)
 
+def get_best_available_model():
+    """Finds the best model available for THIS specific API key."""
+    print("Scanning for available Gemini models...")
+    try:
+        available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+        print(f"Found models: {available_models}")
+        
+        # Priority order: Flash 1.5 -> Pro 1.5 -> Pro 1.0
+        priority = ['models/gemini-1.5-flash', 'models/gemini-1.5-pro', 'models/gemini-pro', 'models/gemini-1.0-pro']
+        
+        for p in priority:
+            if p in available_models:
+                print(f"Selecting best model: {p}")
+                return p
+        
+        if available_models:
+            print(f"No priority models found, using first available: {available_models[0]}")
+            return available_models[0]
+            
+    except Exception as e:
+        print(f"Error listing models: {e}")
+    
+    # Fallback to a common one if list fails
+    return 'gemini-pro'
+
 def generate_seo_tags(content_snippet):
-    # Try different model names for compatibility
-    models_to_try = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro']
+    model_name = get_best_available_model()
+    model = genai.GenerativeModel(model_name)
     
     prompt = f"""
     You are an SEO expert. Analyze the following website content and generate optimized SEO meta tags.
@@ -30,20 +55,9 @@ def generate_seo_tags(content_snippet):
     Format the output as a clean block of HTML tags. Do not include any other text or markdown formatting.
     """
 
-    for model_name in models_to_try:
-        try:
-            print(f"Trying model: {model_name}...")
-            model = genai.GenerativeModel(model_name)
-            response = model.generate_content(prompt)
-            # Remove markdown backticks if AI included them
-            clean_output = response.text.replace("```html", "").replace("```", "").strip()
-            if "<title>" in clean_output: # Basic check to see if it's HTML
-                return clean_output
-        except Exception as e:
-            print(f"Model {model_name} failed: {e}")
-            continue
-
-    raise Exception("Could not generate SEO tags with any available Gemini model.")
+    print(f"Generating content with {model_name}...")
+    response = model.generate_content(prompt)
+    return response.text.replace("```html", "").replace("```", "").strip()
 
 def update_html_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -53,12 +67,9 @@ def update_html_file(file_path):
     clean_text = re.sub(r'<(style|script).*?>.*?</\1>', '', html_content, flags=re.DOTALL)
     content_snippet = clean_text[:2000]
 
-    print("Generating SEO tags with Gemini...")
     new_tags = generate_seo_tags(content_snippet)
     
-    print("New tags generated successfully!")
-
-    # Remove existing common meta tags to avoid duplicates
+    # Remove existing tags to avoid duplicates
     patterns_to_remove = [
         r'<title>.*?</title>',
         r'<meta name="description" content=".*?">',
