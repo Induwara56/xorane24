@@ -1,0 +1,39 @@
+name: AI SEO Generator
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'index.html'
+  workflow_dispatch:
+
+jobs:
+  generate-seo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate SEO Tags
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python seo_generator.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add index.html
+          git commit -m "chore: automated SEO update by Gemini AI" || echo "No changes to commit"
+          git push
