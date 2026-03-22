@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <!-- saved from url=(0021)https://xorane24.org/ -->
 <html lang="en"><head>
-<title>Xorane 24: Mental Health Support, Resources & Community – You Are Not Alone</title>
+<title>Xorane 24: Mental Health Support, Resources & Community | You Are Not Alone</title>
 <meta name="description" content="Find compassionate mental health support & resources at Xorane 24. We believe you are not alone on your wellness journey. Connect with our supportive community today.">
 <meta name="keywords" content="Xorane 24, mental health support, mental wellness, online mental health, emotional support, anxiety help, depression help, stress relief, self-care, coping mechanisms, mental health resources, community support, you are not alone, mental health community">
-<meta property="og:title" content="Xorane 24: Mental Health Support, Resources & Community – You Are Not Alone">
-<meta property="og:description" content="Find compassionate mental health support & resources at Xorane 24. We believe you are not alone on your wellness journey. Connect with our supportive community today.">
+<meta property="og:title" content="Xorane 24 | Mental Health Support & Community | You Are Not Alone">
+<meta property="og:description" content="Find compassionate mental health support & resources at Xorane 24. Join our supportive community for wellness. You are not alone.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://xorane24.org">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Xorane 24: Mental Health Support, Resources & Community – You Are Not Alone">
-<meta name="twitter:description" content="Find compassionate mental health support & resources at Xorane 24. We believe you are not alone on your wellness journey. Connect with our supportive community today.">
+<meta name="twitter:title" content="Xorane 24 | Mental Health Support & Community | You Are Not Alone">
+<meta name="twitter:description" content="Find compassionate mental health support & resources at Xorane 24. Join our supportive community for wellness. You are not alone.">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -18,14 +18,12 @@
     {
       "@type": "Organization",
       "name": "Xorane 24",
-      "url": "https://xorane24.org",
-      "logo": "https://xorane24.org/images/logo.png",
-      "description": "Xorane 24 offers compassionate mental health support, resources, and a supportive community for mental wellness, ensuring you are never alone on your journey."
+      "url": "https://xorane24.org"
     },
     {
       "@type": "WebSite",
+      "name": "Xorane 24",
       "url": "https://xorane24.org",
-      "name": "Xorane 24: Mental Health Support, Resources & Community",
       "potentialAction": {
         "@type": "SearchAction",
         "target": "https://xorane24.org/?s={search_term_string}",
@@ -35,18 +33,6 @@
   ]
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2049,7 +2035,7 @@ const FALLBACK_ARTICLES = [
   {id:'psychology',name:'Psychology Today',icon:'💙',color:'rgba(251,113,133,.15)',title:'The Science of Happiness',description:'Research shows that happiness is not about getting what you want — it is about wanting what you have. Gratitude and connection are key.',link:'https://www.psychologytoday.com/us/basics/happiness',date:'2025'},
   {id:'psychology',name:'Psychology Today',icon:'💙',color:'rgba(251,113,133,.15)',title:'How to Build Resilience in Difficult Times',description:'Resilience is the ability to adapt to adversity. These evidence-based strategies help you bounce back from life challenges.',link:'https://www.psychologytoday.com/us/basics/resilience',date:'2025'},
   {id:'mindful',name:'Mindful',icon:'🌱',color:'rgba(251,191,36,.12)',title:'Getting Started with Mindfulness',description:'Mindfulness means maintaining a moment-by-moment awareness of our thoughts, feelings, and surrounding environment.',link:'https://www.mindful.org/meditation/mindfulness-getting-started/',date:'2025'},
-  {id:'mindful',name:'Mindful',icon:'🌱',color:'rgba(251,191,36,.12)',title:'How to Meditate: A Beginner's Guide',description:'Meditation is simpler than most people think. Start meditating today with just 5 minutes a day.',link:'https://www.mindful.org/how-to-meditate/',date:'2025'},
+  {id:'mindful',name:'Mindful',icon:'🌱',color:'rgba(251,191,36,.12)',title:'How to Meditate: A Beginner Guide',description:'Meditation is simpler than most people think. Start meditating today with just 5 minutes a day.',link:'https://www.mindful.org/how-to-meditate/',date:'2025'},
   {id:'verywellmind',name:'Verywell Mind',icon:'🧠',color:'rgba(167,139,250,.15)',title:'What Is Cognitive Behavioral Therapy?',description:'CBT is a type of psychotherapy that focuses on negative patterns of thought and how they lead to negative behaviors.',link:'https://www.verywellmind.com/what-is-cognitive-behavior-therapy-2795747',date:'2025'},
   {id:'verywellmind',name:'Verywell Mind',icon:'🧠',color:'rgba(167,139,250,.15)',title:'Coping Strategies for Stress and Anxiety',description:'Effective coping strategies help you manage stress and anxiety. Learn which techniques work best.',link:'https://www.verywellmind.com/stress-and-health-3145086',date:'2025'},
   {id:'medicaltoday',name:'Medical News Today',icon:'💊',color:'rgba(129,140,248,.12)',title:'What to Know About Mental Health',description:'Mental health refers to cognitive, behavioral, and emotional well-being. It affects how people think, feel, and behave.',link:'https://www.medicalnewstoday.com/articles/154543',date:'2025'},
@@ -2060,12 +2046,10 @@ const FALLBACK_ARTICLES = [
 
 function loadArticles(){
   const grid=document.getElementById('articles-grid');
-  if(!grid)return;
-  // Show fallback immediately
+  if(!grid) return;
   allArticles=[...FALLBACK_ARTICLES];
   articlesLoaded=true;
   renderArticles(currentFilter);
-  // Try live RSS in background
   let completed=0, liveArticles=[];
   RSS_SOURCES.forEach(source=>{
     fetch(source.url)
@@ -2087,16 +2071,22 @@ function loadArticles(){
         allArticles=liveArticles;
         renderArticles(currentFilter);
       }
-    }).catch(()=>{ completed++; });
+    }).catch(()=>{
+      completed++;
+      if(completed===RSS_SOURCES.length&&liveArticles.length>0){
+        allArticles=liveArticles;
+        renderArticles(currentFilter);
+      }
+    });
   });
 }
 
 function renderArticles(filter){
   const grid=document.getElementById('articles-grid');
-  if(!grid)return;
+  if(!grid) return;
   const filtered=filter==='all'?allArticles:allArticles.filter(a=>a.id===filter);
   if(filtered.length===0){
-    grid.innerHTML='<div class="articles-loading"><p style="color:var(--t3);">No articles found. Try refreshing.</p><button class="btn btnteal btnsm mt16" onclick="loadArticles()">🔄 Try Again</button></div>';
+    grid.innerHTML='<div class="articles-loading"><p style="color:var(--t3);">No articles found. Try refreshing.</p><button class="btn btnteal btnsm mt16" onclick="loadArticles()">Try Again</button></div>';
     return;
   }
   grid.innerHTML='<div class="article-grid">'+filtered.map(a=>`
@@ -2107,7 +2097,7 @@ function renderArticles(filter){
       </div>
       <h3 class="article-title"><a href="${a.link}" target="_blank" rel="noopener noreferrer">${a.title}</a></h3>
       <p class="article-desc">${a.description}</p>
-      <a href="${a.link}" target="_blank" rel="noopener noreferrer" class="btn btnoutline btnsm" style="align-self:flex-start;">Read Full Article →</a>
+      <a href="${a.link}" target="_blank" rel="noopener noreferrer" class="btn btnoutline btnsm" style="align-self:flex-start;">Read Full Article</a>
     </div>
   `).join('')+'</div>';
 }
