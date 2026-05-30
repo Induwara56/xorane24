@@ -1605,6 +1605,8 @@ function showPage(id) {
   // close mobile nav
   document.querySelector('.navlinks').classList.remove('open');
   document.getElementById('ham').classList.remove('open');
+  // ✅ Update URL hash so refresh/back/forward/sharing works
+  history.pushState(null, '', '#' + id);
 }
 
 /* ── Hamburger ── */
@@ -2589,6 +2591,19 @@ window.showPage=function(id){
   var gc=document.getElementById('giscus-container');
   if(gc) gc.style.display=id==='share'?'block':'none';
 };
+
+// ✅ Handle browser back/forward — placed after override so blogs/articles/giscus still load
+window.addEventListener('popstate', function() {
+  closeBlogPost(); // close any open blog overlay first
+  var id = location.hash.replace('#','') || 'home';
+  if (pages.includes(id)) window.showPage(id);
+});
+
+// ✅ On page load, read the hash and navigate to the right page
+(function() {
+  var id = location.hash.replace('#','') || 'home';
+  if (pages.includes(id)) window.showPage(id);
+})();
 
 </script>
 
